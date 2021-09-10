@@ -1,0 +1,94 @@
+paths:
+  /auth/new/:
+    post:
+      summary: Create a new User
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/register"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/authUser"
+        "400":
+          description: Bad request, all fields are required
+  /auth/:
+    post:
+      summary: Login user
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/login"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/authUser"
+        "400":
+          description: Bad request, all fields are required
+        "401":
+          description: Invalid credentials
+
+  /auth/renew:
+    get:
+      summary: Renew user token
+      tags: [Auth]
+      parameters:
+        - name: x-token
+          in: header
+          description: "user token for renew"
+          required: false
+          type: string
+      responses:
+        "200":
+          description: User created
+          content:
+          application/json:
+            schema:
+              $ref: "#/definitions/token"
+
+definitions: # Schema defination for request body
+  register:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  login:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  authUser:
+    type: object
+    properties:
+      ok:
+        type: boolean
+      uid:
+        type: string
+      name:
+        type: string
+      token:
+        type: string
+  token:
+    type: object
+    properties:
+      ok:
+        type: boolean
+      token:
+        type: string
