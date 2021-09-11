@@ -1,0 +1,209 @@
+paths:
+  /events/:
+    get: # Return all calendar events
+      summary: Get all calendar events
+      tags: [Event]
+      parameters:
+        - name: x-token
+          in: header
+          description: User token for request
+          required: true
+          type: string
+      responses:
+        "201":
+          description: Calendar event created
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/allEvents"
+
+    post: # Create a new calendar event and return this
+      summary: Create a new Calendar Event
+      tags: [Event]
+      parameters:
+        - name: x-token
+          in: header
+          description: User token for request
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/requestNewEvent"
+      responses:
+        "201":
+          description: Calendar event created
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/eventCreated"
+        "400":
+          description: Bad request, all fields are required
+
+  /events/{id}:
+    get:
+      summary: Get a calendar event
+      tags: [Event]
+      parameters:
+        - name: x-token
+          in: header
+          description: User token for request
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Id of calendar event
+          required: true
+          type: string
+      responses:
+        200:
+          description: A calendar event object
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/eventCreated"
+        400:
+          description: id parameter is required
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+    put:
+      summary: Update a calendar event
+      tags: [Event]
+      parameters:
+        - name: x-token
+          in: header
+          description: User token for request
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Id of calendar event to update
+          required: true
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/requestNewEvent"
+      responses:
+        200:
+          description: Calendar event object updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/eventCreated"
+        400:
+          description: All fields are required
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+    delete:
+      summary: Delete a calendar event
+      tags: [Event]
+      parameters:
+        - name: x-token
+          in: header
+          description: User token for request
+          required: true
+          type: string
+        - name: id
+          in: path
+          description: Id of calendar event to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: Calendar event deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/success"
+        400:
+          description: Id of calendar event is required
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/error"
+
+definitions: # Schema defination for request body
+  allEvents: # Schema to return all events
+    properties:
+      ok:
+        type: boolean
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/event"
+  eventCreated: # Schema for response to event created
+    properties:
+      ok:
+        type: boolean
+      data:
+        type: object
+        $ref: "#/definitions/event"
+  requestNewEvent: # Schema for request to create a new Event
+    type: object
+    properties:
+      title:
+        type: string
+      notes:
+        type: string
+        requried: false
+      start:
+        type: number
+      end:
+        type: number
+  event: # Schema of event for responses
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      notes:
+        type: string
+      start:
+        type: number
+      end:
+        type: number
+      user:
+        type: string
+  success:
+    type: object
+    properties:
+      ok:
+        type: boolean
+      msg:
+        type: string
+  error:
+    type: object
+    properties:
+      ok:
+        type: boolean
+        default: false
+      msg:
+        type: string

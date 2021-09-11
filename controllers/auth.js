@@ -36,7 +36,6 @@ const createUser = async (req, res = response) => {
       token,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       ok: false,
       msg: "Error en el servidor, intenta nuevamente mas tarde",
@@ -79,7 +78,6 @@ const loginUser = async (req, res = response) => {
       token,
     });
   } catch (error) {
-    console.log(error);
     res.status(500).json({
       ok: false,
       msg: "Error en el servidor, intenta nuevamente mas tarde",
