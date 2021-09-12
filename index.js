@@ -40,5 +40,5 @@ app.use(
 
 // Listen request
 app.listen(process.env.PORT, () => {
-  console.log(`Server running in http://localhost:${4000}`);
+  console.log(`Server running in http://localhost:${process.env.PORT}`);
 });
